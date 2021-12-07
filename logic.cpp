@@ -35,13 +35,21 @@ void Blackjack::hit(std::vector<Card> &hand)
 
 OutcomeType Blackjack::play()
 {
-    std::cout << "PLAYER\t";
+    std::cout << "INIT PLAYER\t";
     Blackjack::print(Blackjack::player);
-    std::cout << "DEALER\t";
+    std::cout << "INIT DEALER\t";
     Blackjack::print(Blackjack::dealer);
+    
+    if (Blackjack::get_sum(Blackjack::player) == 21) {
+        std::cout << "NATURAL BLACKJACK\n";
+        return OutcomeType::WIN;
+    }
 
-    if (Blackjack::get_sum(Blackjack::player) == 21) { return OutcomeType::WIN; }
-    else Blackjack::hit(Blackjack::player);
+    while (Blackjack::get_sum(Blackjack::player) < Blackjack::threshold) {
+        Blackjack::hit(Blackjack::player);
+        std::cout << "PLAYER\t";
+        Blackjack::print(Blackjack::player);
+    }
 
     while(Blackjack::get_sum(Blackjack::dealer) < 17) {
         Blackjack::hit(Blackjack::dealer);

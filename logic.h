@@ -77,7 +77,11 @@ class Blackjack
     std::vector<Card> dealer, player;
 
     public:
-        Blackjack() {
+        int threshold;
+
+        Blackjack(int n) {
+            this->threshold = n;
+
             for (auto deck : decks) {
                 deck = Deck();
                 deck.shuffle();
