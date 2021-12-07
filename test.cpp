@@ -1,2 +1,5 @@
 #include "utils.h"
-int main() {}
+int main()
+{
+    // TODO: IMPLEMENT 3 UNIT TESTS
+}
