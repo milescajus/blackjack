@@ -1,8 +1,12 @@
 #pragma once
+
 #define DECK_SIZE 52
+#define GAME_SIZE 6
+
 #include <string>
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 enum OutcomeType { WIN, LOSE, DRAW };
 
@@ -10,7 +14,6 @@ class Card {
 private:
     char face;
     char suit;
-    bool discarded;
     bool visible;
     int value;
 
@@ -19,28 +22,20 @@ public:
     Card(char face, char suit) {
         this->face = face;
         this->suit = suit;
-        this->visible = true;
-        this->discarded = false;
+        visible = true;
 
         switch(face) {
-            case 'X': this->value = 10; break;
-            case 'J': this->value = 10; break;
-            case 'Q': this->value = 10; break;
-            case 'K': this->value = 10; break;
-            case 'A': this->value = 11; break; // ace can be 1 or 11, decided during turn
-            default: this->value = face - '0'; break;
+            case 'X': value = 10; break;
+            case 'J': value = 10; break;
+            case 'Q': value = 10; break;
+            case 'K': value = 10; break;
+            case 'A': value = 11; break; // ace can be 1 or 11, decided during turn
+            default: value = face - '0'; break;
         }
     }
 
     bool operator==(const Card& rhs) {
         return this->face == rhs.face && this->suit == rhs.suit;
-    }
-
-    Card* take() {
-        if (!discarded) {
-            discarded = true;
-            return this;
-        } else { return NULL; }
     }
 
     char get_face() { return face; }
@@ -57,46 +52,46 @@ class Deck {
 private:
     char faces[13] = {'2', '3', '4', '5', '6', '7', '8', '9', 'X', 'J', 'Q', 'K', 'A'};
     char suits[4] = {'S', 'D', 'H', 'C'};
-    Card cards[DECK_SIZE];
+    std::vector<Card> cards;
 
 public:
     Deck() {
         for (int i = 0; i < DECK_SIZE; ++i) {
-            cards[i] = Card(faces[i % 13], suits[i / 13]);
+            cards.push_back(Card(faces[i % 13], suits[i / 13]));
         }
     }
 
     size_t size() { return DECK_SIZE; }
+    bool empty() { return cards.empty(); }
     Card* get_at(size_t i) { return &cards[i]; }
 
-    Card* get_random();
-    void shuffle();
+    Card take_next();
+    void shuffle() { std::random_shuffle(cards.begin(), cards.end()); }
     void print();
 };
 
 class Blackjack {
 private:
-    Deck decks[6];
+    Deck decks[GAME_SIZE];
     std::vector<Card> dealer, player;
     int threshold;
     int round;
 
 public:
     Blackjack(int n) {
-        this->threshold = n;
-        this->round = 0;
+        threshold = n;
+        round = 0;
 
-        for (auto deck : decks) {
-            deck = Deck();
-            deck.shuffle();
+        for (size_t i = 0; i < GAME_SIZE; ++i) {
+            decks[i] = Deck();
+            decks[i].shuffle();
         }
-
-        hit(dealer);
-        hit(player);
-        hit(player);
     }
 
-    Card* get_random();
+    size_t size() { return GAME_SIZE; }
+    Deck* get_deck(size_t i) { return &decks[i]; }
+
+    Card take_random();
     OutcomeType play();
     int get_sum(std::vector<Card> &hand);
     void hit(std::vector<Card> &hand);

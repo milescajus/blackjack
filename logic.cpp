@@ -1,20 +1,5 @@
 #include "logic.hpp"
 
-void Deck::shuffle() {
-    for (int i = 0; i < DECK_SIZE; ++i) {
-        int r_pos = rand() % (DECK_SIZE - 1);
-        Card tmp = cards[i];
-        cards[i] = cards[r_pos];
-        cards[r_pos] = tmp;
-    }
-}
-
-Card* Deck::get_random() {
-    Card* tmp = get_at(rand() % (DECK_SIZE - 1))->take();
-    if (tmp == NULL) { tmp = get_random(); }
-    return tmp;
-}
-
 void Deck::print() {
     std::string s = "";
 
@@ -25,15 +10,31 @@ void Deck::print() {
     std::cout << s << std::endl;
 }
 
+Card Deck::take_next() {
+    Card tmp = cards.back();
+    cards.pop_back();
+    return tmp;
+}
+
+Card Blackjack::take_random() {
+    size_t d = rand() % GAME_SIZE;
+    if (decks[d].empty()) { return take_random(); }
+    return decks[d].take_next();
+}
+
 void Blackjack::hit(std::vector<Card> &hand)
 {
-    Card* card = Blackjack::get_random();
-    if (card->get_face() == 'A' && Blackjack::get_sum(hand) + 11 > 21) { card->set_value(1); }
-    hand.push_back(*card);
+    Card card = Blackjack::take_random();
+    if (card.get_face() == 'A' && Blackjack::get_sum(hand) + 11 > 21) { card.set_value(1); }
+    hand.push_back(card);
 }
 
 OutcomeType Blackjack::play()
 {
+    hit(dealer);
+    hit(player);
+    hit(player);
+
     std::cout << "INIT PLAYER\t";
     Blackjack::print_hand(Blackjack::player);
     std::cout << "INIT DEALER\t";
@@ -82,7 +83,6 @@ int Blackjack::get_sum(std::vector<Card> &hand)
     return sum;
 }
 
-Card* Blackjack::get_random() { return decks[rand() % 5].get_random(); }
 
 void Blackjack::print_hand(std::vector<Card> &hand)
 {
