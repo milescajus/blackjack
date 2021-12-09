@@ -4,51 +4,65 @@
 class BlackjackTestHarness : public AbstractTestHarness {
 private:
     Blackjack b = Blackjack(17);
-    std::vector<Card> test_hand{ Card('K', 'S'), Card('4', 'H'), Card('A', 'C') };
+    std::vector<Card> test_hand;
+
+    int sum_test()
+    {
+        test_hand = { Card('K', 'S'), Card('4', 'H'), Card('A', 'C') };
+        return b.get_sum(test_hand);
+    }
+
+    bool shuffle_test()
+    {
+        bool shuffled = false;
+
+        for (size_t i = 0; i < b.size() - 2; ++i) {
+            if (b.get_deck(i)->get_at(0) != b.get_deck(i + 1)->get_at(0)) {
+                shuffled = true;
+            }
+        }
+
+        return shuffled;
+    }
+
+    bool presence_test()
+    {
+        Blackjack b = Blackjack(17);
+        test_hand = {};
+        bool decks_empty = true;
+
+        for (int i = 0; i < GAME_SIZE * DECK_SIZE; ++i) {
+            test_hand.push_back(b.take_random());
+        }
+
+        for (int i = 0; i < GAME_SIZE; ++i) {
+            if (!b.get_deck(i)->empty()) { decks_empty = false; }
+        }
+
+        return decks_empty;
+    }
 
 public:
-    BlackjackTestHarness() {
-        register_test_func("Hand of 25",
-                           [this]() -> void { assert_equal(25, b.get_sum(test_hand)); });
+    BlackjackTestHarness()
+    {
+        register_test_func("1: Summing Values",
+                [this]() -> void { assert_equal(25, sum_test()); });
+        register_test_func("2: Deck Shuffling",
+                [this]() -> void { assert_equal(true, shuffle_test()); });
+        register_test_func("3: Card Presence",
+                [this]() -> void { assert_equal(true, presence_test()); });
     }
 };
 
 class GlobalTestManager : public TestManager {
-public:
-    GlobalTestManager() { add_test("Blackjack Tests", BlackjackTestHarness()); }
+    public:
+        GlobalTestManager() { add_test("Blackjack Tests", BlackjackTestHarness()); }
 };
 
 int main()
 {
     srand(time(NULL));
 
-    /*
     auto tr = GlobalTestManager();
     tr.execute();
-    */
-
-    auto b = Blackjack(17);
-    std::vector<Card> test_hand;
-
-    std::cout << "TEST 1 -- summing values\n";
-    test_hand = { Card('K', 'S'), Card('4', 'H'), Card('A', 'C') };
-    assert_equal(25, b.get_sum(test_hand));
-
-    std::cout << "\nTEST 2 -- deck shuffling\n";
-    for (size_t i = 0; i < b.size(); ++i) {
-        b.get_deck(i)->print();
-    }
-
-    assert_equal(0, 1);
-
-    std::cout << "\nTEST 3 -- card presence\n";
-    test_hand = {};
-
-    for (int i = 0; i < GAME_SIZE * DECK_SIZE; ++i) {
-        test_hand.push_back(b.take_random());
-    }
-
-    for (int i = 0; i < GAME_SIZE; ++i) {
-        assert_equal(1, (int)b.get_deck(i)->empty());
-    }
 }

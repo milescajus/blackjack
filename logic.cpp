@@ -1,6 +1,7 @@
 #include "logic.hpp"
 
-void Deck::print() {
+void Deck::print()
+{
     std::string s = "";
 
     for (auto card : cards) {
@@ -10,16 +11,18 @@ void Deck::print() {
     std::cout << s << std::endl;
 }
 
-Card Deck::take_next() {
+Card Deck::take_next()
+{
     Card tmp = cards.back();
     cards.pop_back();
     return tmp;
 }
 
-Card Blackjack::take_random() {
-    size_t d = rand() % GAME_SIZE;
-    if (decks[d].empty()) { return take_random(); }
-    return decks[d].take_next();
+Card Blackjack::take_random()
+{
+    size_t n = rand() % GAME_SIZE;
+    if (decks[n].empty()) { return take_random(); }
+    return decks[n].take_next();
 }
 
 void Blackjack::hit(std::vector<Card> &hand)

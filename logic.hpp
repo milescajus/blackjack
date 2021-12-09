@@ -19,7 +19,8 @@ private:
 
 public:
     Card() {}
-    Card(char face, char suit) {
+    Card(char face, char suit)
+    {
         this->face = face;
         this->suit = suit;
         visible = true;
@@ -34,15 +35,14 @@ public:
         }
     }
 
-    bool operator==(const Card& rhs) {
-        return this->face == rhs.face && this->suit == rhs.suit;
-    }
+    bool operator==(const Card& rhs) { return this->face == rhs.face && this->suit == rhs.suit; }
 
+    void set_value(int n) { value = n; }
     char get_face() { return face; }
     int get_value() { return value; }
-    void set_value(int n) { value = n; }
 
-    std::string to_string() {
+    std::string to_string()
+    {
         std::string z = value < 10 ? "0" : "";
         return visible ? std::string(1, face) + ":" + std::string(1, suit) + " (" + z + std::to_string(value) + ")" : "#:#";
     }
@@ -55,19 +55,20 @@ private:
     std::vector<Card> cards;
 
 public:
-    Deck() {
-        for (int i = 0; i < DECK_SIZE; ++i) {
+    Deck()
+    {
+        for (size_t i = 0; i < DECK_SIZE; ++i) {
             cards.push_back(Card(faces[i % 13], suits[i / 13]));
         }
     }
 
+    void shuffle() { std::random_shuffle(cards.begin(), cards.end()); }
     size_t size() { return DECK_SIZE; }
     bool empty() { return cards.empty(); }
     Card* get_at(size_t i) { return &cards[i]; }
 
-    Card take_next();
-    void shuffle() { std::random_shuffle(cards.begin(), cards.end()); }
     void print();
+    Card take_next();
 };
 
 class Blackjack {
@@ -78,7 +79,8 @@ private:
     int round;
 
 public:
-    Blackjack(int n) {
+    Blackjack(int n)
+    {
         threshold = n;
         round = 0;
 
@@ -91,9 +93,9 @@ public:
     size_t size() { return GAME_SIZE; }
     Deck* get_deck(size_t i) { return &decks[i]; }
 
-    Card take_random();
-    OutcomeType play();
-    int get_sum(std::vector<Card> &hand);
     void hit(std::vector<Card> &hand);
     void print_hand(std::vector<Card> &hand);
+    int get_sum(std::vector<Card> &hand);
+    Card take_random();
+    OutcomeType play();
 };
