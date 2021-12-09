@@ -32,6 +32,10 @@ public:
         }
     }
 
+    bool operator==(const Card& rhs) {
+        return this->face == rhs.face && this->suit == rhs.suit;
+    }
+
     Card* take() {
         if (!discarded) {
             discarded = true;
@@ -40,7 +44,7 @@ public:
     }
 
     char get_face() { return face; }
-    char get_value() { return value; }
+    int get_value() { return value; }
     void set_value(int n) { value = n; }
 
     std::string to_string() {
@@ -61,6 +65,9 @@ public:
             cards[i] = Card(faces[i % 13], suits[i / 13]);
         }
     }
+
+    size_t size() { return DECK_SIZE; }
+    Card* get_at(size_t i) { return &cards[i]; }
 
     Card* get_random();
     void shuffle();

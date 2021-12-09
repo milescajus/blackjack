@@ -1,4 +1,4 @@
-#include "logic.h"
+#include "logic.hpp"
 
 void Deck::shuffle() {
     for (int i = 0; i < DECK_SIZE; ++i) {
@@ -10,7 +10,7 @@ void Deck::shuffle() {
 }
 
 Card* Deck::get_random() {
-    Card* tmp = cards[rand() % (DECK_SIZE - 1)].take();
+    Card* tmp = get_at(rand() % (DECK_SIZE - 1))->take();
     if (tmp == NULL) { tmp = get_random(); }
     return tmp;
 }
