@@ -3,17 +3,16 @@
 
 class BlackjackTestHarness : public AbstractTestHarness {
 private:
-    Blackjack b = Blackjack(17);
-    std::vector<Card> test_hand;
-
     int sum_test()
     {
-        test_hand = { Card('K', 'S'), Card('4', 'H'), Card('A', 'C') };
+        Blackjack b = Blackjack(17);
+        std::vector<Card> test_hand = { Card('K', 'S'), Card('4', 'H'), Card('A', 'C') };
         return b.get_sum(test_hand);
     }
 
     bool shuffle_test()
     {
+        Blackjack b = Blackjack(17);
         bool shuffled = false;
 
         for (size_t i = 0; i < b.size() - 2; ++i) {
@@ -28,7 +27,7 @@ private:
     bool presence_test()
     {
         Blackjack b = Blackjack(17);
-        test_hand = {};
+        std::vector<Card> test_hand = {};
         bool decks_empty = true;
 
         for (int i = 0; i < GAME_SIZE * DECK_SIZE; ++i) {
