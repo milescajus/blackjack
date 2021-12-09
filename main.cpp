@@ -1,4 +1,3 @@
-#include <vector>
 #include "logic.h"
 
 int main()

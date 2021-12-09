@@ -47,13 +47,13 @@ OutcomeType Blackjack::play()
 
     while (Blackjack::get_sum(Blackjack::player) < Blackjack::threshold) {
         Blackjack::hit(Blackjack::player);
-        std::cout << "PLAYER\t";
+        std::cout << "PLAYER\t\t";
         Blackjack::print(Blackjack::player);
     }
 
     while(Blackjack::get_sum(Blackjack::dealer) < 17) {
         Blackjack::hit(Blackjack::dealer);
-        std::cout << "DEALER\t";
+        std::cout << "DEALER\t\t";
         Blackjack::print(Blackjack::dealer);
     }
 
