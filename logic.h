@@ -44,7 +44,8 @@ public:
     void set_value(int n) { value = n; }
 
     std::string to_string() {
-        return visible ? std::string(1, face) + ":" + std::string(1, suit) + " (" + std::to_string(value) + ")" : "#:#";
+        std::string z = value < 10 ? "0" : "";
+        return visible ? std::string(1, face) + ":" + std::string(1, suit) + " (" + z + std::to_string(value) + ")" : "#:#";
     }
 };
 
@@ -71,10 +72,12 @@ private:
     Deck decks[6];
     std::vector<Card> dealer, player;
     int threshold;
+    int round;
 
 public:
     Blackjack(int n) {
         this->threshold = n;
+        this->round = 0;
 
         for (auto deck : decks) {
             deck = Deck();
