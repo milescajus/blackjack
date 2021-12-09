@@ -6,7 +6,10 @@ private:
     Blackjack b = Blackjack(17);
 public:
     BlackjackTestHarness() {
-        // TODO: register_test_func();
+        register_test_func("",
+                           [this]() -> void { assert_equal(OutcomeType::WIN, b.get_sum()); });
+        register_test_func();
+        register_test_func();
     }
 };
 

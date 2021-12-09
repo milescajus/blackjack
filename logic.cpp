@@ -27,18 +27,17 @@ void Deck::print() {
 
 void Blackjack::hit(std::vector<Card> &hand)
 {
-    hand.push_back(*Blackjack::get_random());
-    if (hand[hand.size()].face == 'A' && Blackjack::get_sum(hand) + 11 > 21) {
-        hand[hand.size()].value = 1;
-    }
+    Card* card = Blackjack::get_random();
+    if (card->get_face() == 'A' && Blackjack::get_sum(hand) + 11 > 21) { card->set_value(1); }
+    hand.push_back(*card);
 }
 
 OutcomeType Blackjack::play()
 {
     std::cout << "INIT PLAYER\t";
-    Blackjack::print(Blackjack::player);
+    Blackjack::print_hand(Blackjack::player);
     std::cout << "INIT DEALER\t";
-    Blackjack::print(Blackjack::dealer);
+    Blackjack::print_hand(Blackjack::dealer);
     
     if (Blackjack::get_sum(Blackjack::player) == 21) {
         std::cout << "NATURAL BLACKJACK\n";
@@ -46,15 +45,15 @@ OutcomeType Blackjack::play()
     }
 
     while (Blackjack::get_sum(Blackjack::player) < Blackjack::threshold) {
-        Blackjack::hit(Blackjack::player);
         std::cout << "PLAYER\t\t";
-        Blackjack::print(Blackjack::player);
+        Blackjack::hit(Blackjack::player);
+        Blackjack::print_hand(Blackjack::player);
     }
 
     while(Blackjack::get_sum(Blackjack::dealer) < 17) {
-        Blackjack::hit(Blackjack::dealer);
         std::cout << "DEALER\t\t";
-        Blackjack::print(Blackjack::dealer);
+        Blackjack::hit(Blackjack::dealer);
+        Blackjack::print_hand(Blackjack::dealer);
     }
 
     int dealer_total = Blackjack::get_sum(Blackjack::dealer);
@@ -75,7 +74,7 @@ int Blackjack::get_sum(std::vector<Card> &hand)
 {
     int sum = 0;
     for (auto card : hand) {
-        sum += card.value;
+        sum += card.get_value();
     }
 
     return sum;
@@ -83,7 +82,7 @@ int Blackjack::get_sum(std::vector<Card> &hand)
 
 Card* Blackjack::get_random() { return decks[rand() % 5].get_random(); }
 
-void Blackjack::print(std::vector<Card> &hand)
+void Blackjack::print_hand(std::vector<Card> &hand)
 {
     for (auto card : hand) {
         std::cout << card.to_string() << "\t";

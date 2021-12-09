@@ -11,18 +11,19 @@ int main()
         std::cout << "\n\nGAME " << i + 1 << "\n--------\n\n";
         switch(game.play()) {
             case OutcomeType::WIN:
-                std::cout << "WIN\n";
+                std::cout << "WIN";
                 wins++;
                 break;
             case OutcomeType::DRAW:
-                std::cout << "DRAW\n";
+                std::cout << "DRAW";
                 draws++;
                 break;
             case OutcomeType::LOSE:
-                std::cout << "LOSE\n";
+                std::cout << "LOSE";
                 losses++;
                 break;
         }
+        std::cout << std::endl;
     }
 
     std::cout << "\n\n------\n\n" << wins << " wins, " << draws << " draws, " << losses << " losses" << std::endl;
