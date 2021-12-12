@@ -58,7 +58,7 @@ public:
     Deck()
     {
         for (size_t i = 0; i < DECK_SIZE; ++i) {
-            cards.push_back(Card(faces[i % 13], suits[i / 13]));
+            cards.emplace_back(faces[i % 13], suits[i / 13]);
         }
     }
 
